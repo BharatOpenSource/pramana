@@ -7,33 +7,54 @@
 
 ## What this project is
 
-An identity management system designed for Indian civic and institutional context. Provides verified identity for people, organizations, and systems that participate in pravaaha processes.
+An internal identity and access management (IAM) system for pravaaha — a replacement for Active Directory within the pravaaha ecosystem.
 
-**The problem:** pravaaha processes involve actors — applicants, officials, contractors, businesses. For processes to be accountable, the actors must be verifiable. A process step signed by "Tax Officer" means nothing. A step signed by a verified identity tied to a real person in a real role means everything.
+**What it does:**
+- Manages users, roles, and organisations within a pravaaha deployment
+- Manages signing keys for pravaaha operations (publish, approve, propose-change)
+- Enforces multi-sig signer lists and role-based access
+- Provides a pluggable interface for external identity providers (LDAP, SAML, OAuth, Aadhaar, etc.)
 
-**The idea:** A standalone identity system with its own CLI that integrates with pravaaha and other tools under BharatOpenSource. Identity is verified once at onboarding. Every subsequent action (publishing a process, signing a step, proposing a change) is confirmed via key. The system is robust, secure, scalable, and Indian-context-aware.
+**What it does NOT do:**
+- Pramana does not verify external identities — that is the adopting org's responsibility
+- Pramana does not integrate with Aadhaar directly — orgs wire that themselves if needed
+- Pramana does not hold biometric or sensitive government ID data
+- Pramana is not responsible for verifying that "this person is a Tax Officer" — the org's own authority chain does that; Pramana manages the result
 
-## Relationship to other projects
+**The principle:** Minimize what Pramana holds. Keys belong to users, not to Pramana. Transparency enforced wherever possible.
 
-- **pravaaha** uses Pramana to verify process owners and actors
-- **Sutra** (the language) may define identity schemas
-- **Pramana CLI** complements `pravaaha` CLI — a separate binary, works alongside it
-- Future: could integrate with Aadhaar or other Indian identity infrastructure (separate, sensitive discussion)
+## Relationship to pravaaha
 
-## Potential scope
+pravaaha v0.1 uses lightweight GPG/SSH key signing. Pramana replaces this in v0.2 with a proper IAM layer:
+- Users are Pramana identities
+- Signing keys are Pramana-managed (generated, rotated, revoked through Pramana)
+- Multi-sig signer lists for a process branch are Pramana role assignments
+- External IdP integration (LDAP, SAML, OAuth) lets orgs plug in their existing identity systems
+- Aadhaar or any other government ID integration is the org's layer, not Pramana's
 
-- Key generation and management at onboarding (non-technical user friendly)
-- Org identity (an NGO, a government department, a business)
-- Role identity (Tax Officer at Income Tax Department, Delhi)
-- Integration with Active Directory and equivalent systems
-- Identity verification for real persons (sensitive — requires separate privacy/security session)
-- Process initiation triggers automatic access grant for restricted processes
+## Integration surface
+
+Pramana exposes hooks for external identity providers. An org can wire:
+- Their existing Active Directory / LDAP
+- SAML / OAuth (Google Workspace, Microsoft Entra, etc.)
+- Government systems (Aadhaar e-KYC, DigiLocker) — at their own discretion
+- Any custom identity system
+
+Pramana accepts the verified identity result and manages it internally. It does not own the verification.
+
+## Design principles
+
+1. **Minimum data held** — keys belong to users; Pramana stores the minimum required to operate
+2. **Pluggable IdP** — no assumption about how users are verified externally
+3. **Transparency** — all access changes, key rotations, and role assignments are auditable
+4. **Org sovereignty** — government and enterprise deployments make their own data decisions; Pramana enables, does not mandate
+5. **CLI-first** — `pramana` CLI complements `pravaaha` CLI
 
 ## Current status
 
-**Seed idea. Not yet spec.**
+**Seed idea. Design not yet started.**
 
-Emerged from pravaaha technical QA (2026-06-26). Requirements will become concrete once pravaaha v0.1 is built and real identity pain points surface. Do not design this in a vacuum.
+Requirements will crystallise once pravaaha v0.1 is used and real IAM pain points surface. Do not design this in a vacuum.
 
 ## Session start checklist
 
@@ -49,4 +70,5 @@ Before doing anything else each session:
 
 ## Git
 
-Repo: TBD (GitHub repo not yet created)
+Repo: https://github.com/BharatOpenSource/pramana
+Branch convention: `feature/<short-description>`
