@@ -4,14 +4,16 @@
 
 ## Session: 2026-06-26
 
-**Status:** Seed idea logged. Not yet spec.
+**Status:** Scope corrected and locked. Design not started.
 
-**Completed:**
-- [x] Project folder created at `pramana/` in BharatOpenSource workspace
-- [x] Vision and origin documented
-- [x] Open questions captured
+**Completed this session:**
+- [x] Scope corrected: Pramana is an internal IAM system (Active Directory replacement for pravaaha) — NOT an external identity verifier
+- [x] External verification (Aadhaar, biometrics, gov IDs) = adopting org's responsibility; Pramana provides integration hooks
+- [x] Design principles locked: minimum data held, keys belong to users, org sovereignty, transparency
+- [x] CLAUDE.md and ConvoQA.md updated and pushed
 
 **Pending:**
-- [ ] Dedicated privacy and security session before any design decisions
-- [ ] Aadhaar integration discussion (separate, sensitive)
-- [ ] Requirements will crystallise once pravaaha v0.1 surfaces real identity pain points
+- [ ] Design not started — waiting for pravaaha v0.1 to surface real IAM pain points
+- [ ] Internal user/role/org data model
+- [ ] Key management for non-technical users
+- [ ] Pluggable IdP interface design (LDAP, SAML, OAuth hooks)
